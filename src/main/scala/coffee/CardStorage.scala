@@ -13,7 +13,7 @@ trait CardStorage {
 object MemoryCardStorage extends CardStorage {
   val map = Map[Long,Flashcard]()
   var index = new AtomicLong(1)
-  map.put(1, Flashcard("hello","ciao",None))
+  map.put(1, Flashcard("hello","ciao",Some(1)))
   map.put(2, Flashcard("hotel","l'albergo",Some(2)))
   
   override def getCard(id: Long) = map.get(id)

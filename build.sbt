@@ -16,4 +16,6 @@ libraryDependencies ++= Seq(
 
 Revolver.settings
 
+enablePlugins(JavaAppPackaging)
+
 EclipseKeys.createSrc := EclipseCreateSrc.All

@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import spray.routing.SimpleRoutingApp
 import spray.json.DefaultJsonProtocol
 import java.util.concurrent.atomic.AtomicLong
+import util.Properties
 
 case class Flashcard(question: String, answer: String, id: Option[Long] = None)
 
@@ -16,8 +17,9 @@ object Server extends App with SimpleRoutingApp {
   import spray.httpx.SprayJsonSupport._
   import JsonImplicits._
 
-  val cardStorage: CardStorage = new MongoCardStorage()
-
+  val cardStorage: CardStorage = MemoryCardStorage
+  //val cardStorage: CardStorage = new MongoCardStorage()
+  
   val restRoute = get {
     path("cards") {
       complete(cardStorage.listCards())
@@ -50,5 +52,8 @@ object Server extends App with SimpleRoutingApp {
   }
   
   val route = restRoute ~ htmlRoute
-  startServer(interface = "localhost", port = 8080)(route)
+
+  val portNumber = Properties.envOrElse("PORT", "8080").toInt
+  
+  startServer(interface = "localhost", port = portNumber)(route)
 }
