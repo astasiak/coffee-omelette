@@ -1,0 +1,19 @@
+<!doctype html>
+<html ng-app="helloApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-resource.min.js"></script>
+    <script src="/static/ngApp.js"></script>
+  </head>
+  <body>
+    <div ng-controller="HelloController">
+      <button ng-click="chiliSpicy()">Chili</button>
+      <button ng-click="jalapenoSpicy()">Jalapeño</button>
+      <input type="text" ng-model="spice" placeholder="Enter a name here">
+      <h1>Hello, {{ spice }}!</h1>
+      <ul>
+        <li ng-repeat="card in cards">{{card.question}}, {{card.answer}}</li>
+      </ul>
+    </div>
+  </body>
+</html>
