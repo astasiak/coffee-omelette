@@ -1,39 +1,13 @@
 package coffee
 
-import akka.actor._
+import akka.actor.ActorSystem
 import spray.routing.SimpleRoutingApp
 import spray.json.DefaultJsonProtocol
 import java.util.concurrent.atomic.AtomicLong
 import util.Properties
-import spray.routing.HttpService
-import akka.io.IO
-import spray.can.Http
 
-case class Flashcard(question: String, answer: String, id: Option[Long] = None)
-
-object JsonImplicits extends DefaultJsonProtocol {
-  implicit val impFlashcard = jsonFormat3(Flashcard)
-}
-
-object Server extends App with SimpleRoutingApp {
-  
-  implicit val system = ActorSystem("on-spray-can")
-
-  val service = system.actorOf(Props[MyServiceActor], "demo-service")
-
-  val portNumber = Properties.envOrElse("PORT", "8080").toInt
-  
-  IO(Http) ! Http.Bind(service, "0.0.0.0", portNumber)
-  
-}
-class MyServiceActor extends Actor with MyService {
-  def actorRefFactory = context
-  
-  def receive = runRoute(myRoute)
-}
-
-trait MyService extends HttpService {
-  
+object Server3 extends /*App with */SimpleRoutingApp {
+  implicit val actorSystem = ActorSystem()
   import spray.httpx.SprayJsonSupport._
   import JsonImplicits._
 
@@ -71,5 +45,9 @@ trait MyService extends HttpService {
     }
   }
   
-  val myRoute = restRoute ~ htmlRoute
+  val route = restRoute ~ htmlRoute
+
+  val portNumber = Properties.envOrElse("PORT", "8080").toInt
+  
+  startServer(interface = "localhost", port = portNumber)(route)
 }
